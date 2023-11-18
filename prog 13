@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_LINE_LENGTH 100
+
+typedef struct {
+    char label[20];
+    char mnemonic[20];
+    char operand[20];
+} Instruction;
+
+typedef struct {
+    char symbol[20];
+    int address;
+} SymbolTableEntry;
+
+SymbolTableEntry symbolTable[100];
+int symbolTableSize = 0;
+int locationCounter = 0;
+
+// Function declarations
+void passOne(FILE *inputFile);
+void passTwo(FILE *inputFile);
+
+int main() {
+    FILE *inputFile;
+
+    // Open the input assembly code file
+    inputFile = fopen("input.asm", "r");
+    if (inputFile == NULL) {
+        fprintf(stderr, "Error opening input file.\n");
+        return 1;
+    }
+
+    // Pass I
+    passOne(inputFile);
+
+    // Reset file position to the beginning for Pass II
+    rewind(inputFile);
+
+    // Pass II
+    passTwo(inputFile);
+
+    // Close the input file
+    fclose(inputFile);
+
+    return 0;
+}
+
+void passOne(FILE *inputFile) {
+    char line[MAX_LINE_LENGTH];
+
+    // Read each line from the input file
+    while (fgets(line, MAX_LINE_LENGTH, inputFile) != NULL) {
+        Instruction instruction;
+
+        // Parse the line into label, mnemonic, and operand
+        sscanf(line, "%s %s %s", instruction.label, instruction.mnemonic, instruction.operand);
+
+        // Process labels and update the symbol table
+        if (strlen(instruction.label) > 0) {
+            strcpy(symbolTable[symbolTableSize].symbol, instruction.label);
+            symbolTable[symbolTableSize].address = locationCounter;
+            symbolTableSize++;
+        }
+
+        // Update location counter
+        locationCounter++;
+    }
+}
+
+void passTwo(FILE *inputFile) {
+    char line[MAX_LINE_LENGTH];
+    int opcode;
+
+    // Read each line from the input file
+    while (fgets(line, MAX_LINE_LENGTH, inputFile) != NULL) {
+        Instruction instruction;
+
+        // Parse the line into label, mnemonic, and operand
+        sscanf(line, "%s %s %s", instruction.label, instruction.mnemonic, instruction.operand);
+
+        // Get opcode (replace with actual opcode lookup)
+        opcode = getOpcode(instruction.mnemonic);
+
+        // Generate machine code based on opcode and operand (replace with actual logic)
+        printf("%02X %s\n", opcode, instruction.operand);
+    }
+}
+
+int getOpcode(char *mnemonic) {
+    // Replace with actual opcode lookup
+    if (strcmp(mnemonic, "ADD") == 0) {
+        return 0x01;
+    } else if (strcmp(mnemonic, "SUB") == 0) {
+        return 0x02;
+    }
+    // Add more cases for other mnemonics
+
+    return 0;
+}

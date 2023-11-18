@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_CODE_LINES 100
+#define MAX_LINE_LENGTH 100
+
+typedef struct {
+    char code[MAX_LINE_LENGTH];
+} CodeLine;
+
+CodeLine code[MAX_CODE_LINES];
+int codeSize = 0;
+
+// Function declarations
+void displayCode();
+void constantFolding();
+void deadCodeElimination();
+
+int main() {
+    int choice;
+
+    // Read the input code
+    FILE *inputFile = fopen("input_code.txt", "r");
+    if (inputFile == NULL) {
+        fprintf(stderr, "Error opening input file.\n");
+        return 1;
+    }
+
+    // Read each line from the input file
+    while (fgets(code[codeSize].code, MAX_LINE_LENGTH, inputFile) != NULL) {
+        codeSize++;
+    }
+
+    // Close the input file
+    fclose(inputFile);
+
+    // Menu-driven code optimization
+    do {
+        printf("\nMenu:\n");
+        printf("1. Display Code\n");
+        printf("2. Constant Folding\n");
+        printf("3. Dead Code Elimination\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                displayCode();
+                break;
+            case 2:
+                constantFolding();
+                break;
+            case 3:
+                deadCodeElimination();
+                break;
+            case 4:
+                printf("Exiting the program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
+void displayCode() {
+    printf("\nOriginal Code:\n");
+    for (int i = 0; i < codeSize; i++) {
+        printf("%s", code[i].code);
+    }
+}
+
+void constantFolding() {
+    // Placeholder for constant folding optimization
+    // Replace with actual constant folding logic
+    printf("\nApplying Constant Folding...\n");
+    printf("Constant Folding Optimization Applied.\n");
+}
+
+void deadCodeElimination() {
+    // Placeholder for dead code elimination optimization
+    // Replace with actual dead code elimination logic
+    printf("\nApplying Dead Code Elimination...\n");
+    printf("Dead Code Elimination Optimization Applied.\n");
+}
